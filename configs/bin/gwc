@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+set -e
+DIR=$(pwd)
+MSG=$(echo $@)
+
+git add .
+git commit -m "$MSG"
+git push origin source
+
+cd _site
+git add .
+git commit -m "$MSG"
+git push origin master
+
