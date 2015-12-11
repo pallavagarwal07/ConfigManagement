@@ -16,15 +16,15 @@ Let's look at the file structure.
 
 ```
 myconfig
-    ├── backup
-    │   ├── 2015-11-30_13-46-31
-    │   └── ........
-    ├── configs
-    │   ├── nvimrc
-    │   ├── Xdefaults
-    │   └── ........
-    ├── configure.py
-    └── current_state
+    ├── backup
+    │   ├── 2015-11-30_13-46-31
+    │   └── ........
+    ├── configs
+    │   ├── nvimrc
+    │   ├── Xdefaults
+    │   └── ........
+    ├── configure.py
+    └── current_state
 ```
 
 During the initial setup, you are only concerned with `configure.py`, and the
@@ -89,3 +89,8 @@ even if it was part of `current_status`. While adding a file to config system
 for first time, if the file at target path is not a symlink but a real file, it
 is copied to the backups folder under current date and time before being
 replaced by a symlink to prevent data loss.
+
+### Planned Features for future:
+
+- Ability to assert commands to run after placing a file. Eg to run `fc-cache` after placing fonts folder.
+- Ability to put condidtional statements. For example, place `.vimrc` only if `which vim` returns a zero exit code.
