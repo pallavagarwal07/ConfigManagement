@@ -1,6 +1,5 @@
 #### __*Config Management, the UNIX way:*__
-First things first, [here](https://github.com/pallavagarwal07/ConfigManagement)
-is the repository for my project. The configuration system is inspired by
+The configuration system is inspired by
 VIM's modelines, which are basically comments that can control VIM's settings
 separately for code files. So, something like
 
