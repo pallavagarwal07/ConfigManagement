@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+icon="$HOME/bin/lock.png"
+tmpbg='/tmp/screen.png'
+
+(( $# )) && { icon=$1; }
+
+scrot "$tmpbg"
+convert "$tmpbg" -resize 12.5% -resize 800% "$tmpbg"
+#convert "$tmpbg" -blur 0x8 "$tmpbg"
+#convert "$tmpbg" -resize 12.5x12.5% -gaussian-blur 0x50 -resize 800x800% "$tmpbg"
+convert "$tmpbg" "$icon" -gravity center -composite -matte "$tmpbg"
+i3lock -u -i "$tmpbg"
+#i3lock -u
