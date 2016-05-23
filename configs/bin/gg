@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+url="$(git remote get-url origin | grep -oP '\w*/\w*$')"
+git remote set-url origin 'git@github.com:'$url
+git $@
+if [ $? != 0 ]; then
+    git remote set-url origin 'https://github.com/'$url
+    git $@
+    if [ $? != 0 ]; then
+        git remote set-url origin 'git://github.com/'$url
+        git $@
+    fi
+fi
