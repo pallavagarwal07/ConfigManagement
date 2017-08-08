@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-echo "$@" > /home/pallav/bin/temp
