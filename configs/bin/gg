@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-url="$(git remote get-url origin | grep -oP '\w*/\w*$')"
+url="$(git remote get-url origin | grep -oP '[\w\d-_.]+/[\w\d-._]+$')"
 git remote set-url origin 'git@github.com:'$url
 git $@
 if [ $? != 0 ]; then

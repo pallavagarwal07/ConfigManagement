@@ -1,1 +1,3 @@
-./prezto/runcoms/zlogout
+source ~/.zprezto/runcoms/zlogout
+
+# place &~/.zlogout&

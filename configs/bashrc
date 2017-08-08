@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+alias emm="sudo emerge --ask"
+alias vi=nvim
+alias vim=nvim
+alias svim="sudo -E nvim"
 
 
 
@@ -6,5 +10,5 @@
 
 
 
-
+PATH="$PATH:$HOME/.GO/bin"
 # place ''~/.bashrc''

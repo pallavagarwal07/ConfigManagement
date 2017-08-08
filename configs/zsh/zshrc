@@ -1,1 +1,16 @@
-./prezto/runcoms/zshrc
+setopt EXTENDED_GLOB
+alias emm="sudo emerge --ask"
+alias vi=nvim
+alias vim=nvim
+alias svim="sudo -E nvim"
+source ~/.zprezto/init.zsh
+unalias gg
+prompt cloud →
+
+
+
+
+
+
+PATH="$PATH:$HOME/.GO/bin"
+# place ''~/.zshrc''

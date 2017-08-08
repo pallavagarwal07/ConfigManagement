@@ -9,7 +9,6 @@ git push origin source
 
 cd _site
 touch .nojekyll
-cp -r ../.well-known ./
 git add .
 git commit -m "$MSG"
 git push origin master

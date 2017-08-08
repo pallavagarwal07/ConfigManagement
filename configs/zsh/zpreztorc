@@ -1,1 +1,3 @@
-./prezto/runcoms/zpreztorc
+source ~/.zprezto/runcoms/zpreztorc
+
+# place &~/.zpreztorc&

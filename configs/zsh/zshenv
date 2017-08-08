@@ -1,1 +1,3 @@
-./prezto/runcoms/zshenv
+source ~/.zprezto/runcoms/zshenv
+
+# place &~/.zshenv&

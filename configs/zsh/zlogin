@@ -1,1 +1,3 @@
-./prezto/runcoms/zlogin
+source ~/.zprezto/runcoms/zlogin
+
+# place &~/.zlogin&

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+mymount() {
+    mount $@ 2>&- || mount -o remount $@
+}
+
+mymount /dev/sda3 /mnt/arch
+mymount -t proc /proc /mnt/arch/proc
+mymount --rbind /sys /mnt/arch/sys
+mymount --make-rslave /mnt/arch/sys
+mymount --rbind /dev /mnt/arch/dev
+mymount --make-rslave /mnt/arch/dev
+mymount /dev/sda5 /mnt/arch/home
+
+chroot /mnt/arch /usr/bin/su -l pallav -c "\$SHELL -i"
