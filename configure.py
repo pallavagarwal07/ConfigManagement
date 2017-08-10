@@ -13,16 +13,77 @@ def get_datetime():
 def get_path():
     return os.path.dirname(os.path.realpath(__file__))
 
+def find_corresponding_closer(code, i, is_if):
+    count = 1
+    for j in range(i, len(code)):
+        if code[j][0] == 'if':
+            count += 1
+        elif code[j][0] == 'endif':
+            count -= 1
+        if count == 0:
+            return j
+        if is_if and (count == 1 and code[j][0] == 'else'):
+            return j
+    print("Never ending conditional statement")
+    exit(1)
+
+def astify(code):
+    newc = []
+    i = 0
+    while i < len(code):
+        c = code[i]
+        if c[0] == 'place':
+            newc.append(c)
+        if c[0] == 'if':
+            j = find_corresponding_closer(code, i+1, True)
+            if code[j][0] == 'else':
+                k = find_corresponding_closer(code, j+1, False)
+                newc.append([c, astify(code[i+1:j]), astify(code[j+1:k])])
+                i = k
+            else:
+                newc.append([c, astify(code[i+1:j]), []])
+                i = j
+        if c[0] == 'exec':
+            newc.append(c)
+        i += 1
+    return newc
+
+
+def codify(names):
+    tokens = ["place", "if", "else", "exec", "endif"]
+    names = [k for k in names if k.strip() != '']
+    for i, n in enumerate(names):
+        indices = [n.find(t) for t in tokens if n.find(t) != -1]
+        if len(indices) == 0:
+            print "Statement %s contains no tokens" % n
+            exit(1)
+        names[i] = n[min(indices):]
+    names = [c.split(' ') for c in names]
+    return astify(names)
+
 def extract_path(names):
     if type(names) is not list:
         names = names.strip().split("\n")
-    for name in names:
+    for i, name in enumerate(names):
         k = re.findall(r"place ''(.*)''", name)
         if k:
             return k[0]
         k = re.findall(r"place &(.*)&", name)
         if k:
             return k[0]
+        k = re.findall(r"begin-conf", name)
+        if k:
+            names = names[i+1:]
+            break
+    else:
+        return False
+    for i, name in enumerate(names):
+        k = re.findall(r"end-conf", name)
+        if k:
+            names = names[:i]
+            break
+    names = codify(names)
+    print(names)
     return False
 
 def start_symming(path):
@@ -48,7 +109,7 @@ def start_symming(path):
                 start_symming(name)
             elif os.path.isfile(name):
                 text = open(name).read().strip().split("\n")
-                text = text[:2] + text[-2:]
+                text = text[-20:]
                 sym = extract_path(text)
                 if sym:
                     sym = os.path.expanduser(sym)
