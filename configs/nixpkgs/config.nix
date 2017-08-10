@@ -1,5 +1,6 @@
 {
-  nix.nixPath = [ "/home/pallavag/packages" "nixos-config=/etc/nixos/configuration.nix" ];
+  nix.nixPath = [ "/home/pallav/proj" "nixos-config=/etc/nixos/configuration.nix" ];
+  nix.binaryCaches = ["http://hydra.nixos.org/" "http://cache.nixos.org/"];
   allowUnfree = true;
   packageOverrides = pkgs: rec {
 
@@ -37,9 +38,8 @@
         scrot compton libnotify firefox go udisks2 manpages tcpflow i3lock zsh
         wxGTK29 mosh pythonPackages.udiskie quickAccess openssl tcpdump gdb
         weechat scala sbt graphviz alsaTools gparted arp-scan skype openjdk8
-        rust.rustc rust.cargo flex bison fuse mysql-workbench
-        httpie android-studio vagrant ranger python3Packages.pip bazel
-        gitlab-runner
+        rust.rustc rust.cargo flex bison fuse mysql-workbench httpie
+        android-studio vagrant ranger python3Packages.pip bazel gitlab-runner
       ];
     };
   };
