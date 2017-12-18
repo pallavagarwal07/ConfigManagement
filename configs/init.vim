@@ -1,4 +1,8 @@
-let vimDir = '$HOME/.config/nvim'
+let vimDir = '$HOME/.vim'
+if has('nvim')
+  let vimDir = '$HOME/.config/nvim'
+endif
+
 if empty(glob(vimDir . '/autoload/plug.vim'))
     execute "!curl -fLo " . vimDir . "/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 endif
@@ -32,7 +36,6 @@ Plug 'kchmck/vim-coffee-script'                                      " Highlight
 Plug 'fatih/vim-go'                                                  " Go completion and features
 Plug 'KabbAmine/zeavim.vim'                                          " Direct documentation access
 Plug 'Superbil/llvm.vim', { 'for': 'llvm' }                          " LLVM highlighting
-Plug 'rhysd/vim-clang-format'
 Plug 'LnL7/vim-nix', { 'for': 'nix' }
 Plug 'thanthese/Tortoise-Typing'
 Plug 'kh3phr3n/python-syntax'
@@ -45,6 +48,10 @@ Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-sleuth'
 Plug 'rust-lang/rust.vim'
 Plug 'floobits/floobits-neovim'
+Plug 'osyo-manga/vim-over'
+Plug 'derekelkins/agda-vim'
+Plug 'Chiel92/vim-autoformat'
+Plug 'rhysd/vim-goyacc'
 call plug#end()                                                      " Vundle ends here
 
 set shiftwidth=4                                                     " Indentation
@@ -88,16 +95,20 @@ nnoremap  <silent> <s-tab>  mq:bprevious<CR>`q
 inoremap <// </<C-X><C-O><C-[>m'==`'
 nnoremap Q !!sh<CR>
                                                                      " Replace current line with output of shell
+cnoremap %s/ OverCommandLine<cr>%sr<BS>/
 
                         " --------------------------------CONFIGS----------------------------- "
 
 let NERDTreeIgnore=['\.pyc$', '__pycache__']                         " Ignoring .pyc files and __pycache__ folder
 let g:go_fmt_command = "goimports"                                   " Rewrite go file with correct imports
+let g:over_enable_cmd_window = 1
 set wildignore+=*/bin/*,main,*/__pycache__/*,*.pyc,*.swp
 set backspace=indent,eol,start                                       " Make backspace work with end of line and indents
 set foldmethod=syntax                                                " Auto Add folds - Trigger with za
 set foldlevel=9999                                                   " Keep folds open by default
 set scrolloff=10                                                     " Scroll Offset below and above the cursor
+set sidescroll=1                                                     " How many columns to scroll at once on moving right
+set sidescrolloff=20                                                 " Scroll offset on scrolling horizontally
 set expandtab                                                        " Replace tab with spaces
 set tabstop=4                                                        " Tab = 4 Space
 "set softtabstop=4                                                   " Act like there are tabs not spaces
@@ -112,13 +123,13 @@ set relativenumber                                                   " relative 
 set number                                                           " Line numbers - Hybrid mode when used with rnu
 set nowrap                                                           " I don't like wrapping statements
 set laststatus=2                                                     " Show status line for even 1 file
-"set tags=~/.mytags                                                   " Path to generated tags
 set mouse=nv                                                         " Allow mouse usage in normal and visual modes
 set nohlsearch                                                       " Do not highlight all search suggestions.
 set modeline                                                         " Turn on modeline
 
 let g:airline_powerline_fonts = 1                                    " Powerline fonts
 let g:airline#extensions#tabline#enabled = 1                         " Show buffers above
+let g:agda_extraincpaths = ["/home/pallav/courses/popl/agda/1.3"]
 
 if has('persistent_undo')
     let myUndoDir = expand(vimDir . '/undodir')
@@ -130,20 +141,20 @@ endif
 
 
 " Lint Configs
-let g:clang_format#style_options = {
-            \ "AccessModifierOffset" : -4,
-            \ "IndentWidth" : 4,
-            \ "TabWidth" : 4,
-            \ "AllowShortIfStatementsOnASingleLine" : "false",
-            \ "AllowShortBlocksOnASingleLine" : "false",
-            \ "AllowShortLoopsOnASingleLine" : "false",
-            \ "AllowShortFunctionsOnASingleLine" : "false",
-            \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "PointerAlignment" : "Right",
-            \ "DerivePointerAlignment" : "false",
-            \ "SortIncludes" : "false",
-            \ "ColumnLimit" : 90,
-            \ "Standard" : "Auto" }
+" let g:clang_format#style_options = {
+"             \ "AccessModifierOffset" : -4,
+"             \ "IndentWidth" : 4,
+"             \ "TabWidth" : 4,
+"             \ "AllowShortIfStatementsOnASingleLine" : "false",
+"             \ "AllowShortBlocksOnASingleLine" : "false",
+"             \ "AllowShortLoopsOnASingleLine" : "false",
+"             \ "AllowShortFunctionsOnASingleLine" : "false",
+"             \ "AlwaysBreakTemplateDeclarations" : "true",
+"             \ "PointerAlignment" : "Right",
+"             \ "DerivePointerAlignment" : "false",
+"             \ "SortIncludes" : "false",
+"             \ "ColumnLimit" : 90,
+"             \ "Standard" : "Auto" }
 
 let g:multi_cursor_insert_maps = {'j':1}
 
@@ -189,12 +200,14 @@ augroup filetype_compile
   autocmd FileType tex nnoremap <F3> mm:w<CR>:!pdflatex<Space>%<CR><CR><Return>`m
 augroup END
 
-augroup filetype_compile
-  autocmd!
-  autocmd BufWritePre *.c,*.h,*.cpp,*.objc,*.cc ClangFormat
-augroup END
-
 autocmd FileType python inoremap # X<c-h>#
+autocmd BufRead,BufNewFile *.flix set filetype=flix
+" autocmd BufWritePre *.c,*.h,*.cpp,*.objc,*.cc ClangFormat
+autocmd FileType agda inoremap <localleader>BB 𝔹
+autocmd FileType agda cnoremap <localleader>BB 𝔹
+autocmd FileType agda inoremap <localleader>BV 𝕍
+autocmd FileType agda cnoremap <localleader>BV 𝕍
+"autocmd BufWrite * :Autoformat
 
                         "---------------------------OPERATOR-PENDING---------------------------"
 " Operate inside next block
