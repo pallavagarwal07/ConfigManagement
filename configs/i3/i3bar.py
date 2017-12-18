@@ -12,6 +12,11 @@ import subprocess as sp
 arr = []
 text = ''
 
+def LOG(content):
+    with open("/home/pallav/log2", "a") as f:
+        f.write(content)
+        f.write("\n")
+
 def battery():
     dict = {}
     status = open('/sys/class/power_supply/BAT1/status').read()
@@ -49,14 +54,17 @@ def click_events():
         while True:
             buff += raw_input()
             text = buff[0].replace(',', '') + buff[1:]
+            LOG(text)
             try:
                 obj = json.loads(text)
-                if obj["name"] == "vol":
-                    if obj["button"] == 1 and obj["x"] >= 1500 and obj["x"] <= 1605:
-                        new_vol = 10*((obj["x"] - 1500)/7 + 1)
-                        sp.call(["pamixer", "--allow-boost", "--set-volume", str(new_vol)])
-                    if obj["button"] == 2 or obj["button"] == 3:
-                        sp.call(["bash", "-c", "pavucontrol&"])
+                if "x_off" in obj:
+                    obj["x"] = 1500 + obj["x_off"] - 47
+                if obj["button"] == 1 and obj["x"] >= 1500 and obj["x"] <= 1605:
+                    new_vol = 10*((obj["x"] - 1500)/7 + 1)
+                    sp.call(["pamixer", "--allow-boost", "--set-volume", str(new_vol)])
+                    repaint()
+                if obj["button"] == 2 or obj["button"] == 3:
+                    sp.call(["bash", "-c", "pavucontrol&"])
             except Exception as e:
                 text = str(e)
             buff = ''
@@ -95,12 +103,18 @@ def connection(fullName, abbrv):
     dict = {'name': 'wlan'}
     dict["instance"] = "0"
     if '.' in ip:
-        dict["full_text"] = '{:^20}'.format( "W: "+ip )
+        dict["full_text"] = '{:^20}'.format( abbrv + ": "+ip )
         dict['color'] = '#44ff11'
     else:
         dict["full_text"] = '{:^20}'.format(abbrv + ": --.--.--.--" )
         dict['color'] = '#ff4411'
     return dict
+
+def repaint():
+    arr = []
+    create(arr)
+    print ',', json.dumps(arr)
+    sys.stdout.flush()
 
 
 def create(arr):
@@ -119,13 +133,7 @@ if __name__ == '__main__':
     print '{ "version": 1, "click_events": true }'
     print '['
     print '[]'
-    arr = []
-    create(arr)
-    for j in range(0, 85):
-        print ',', json.dumps(arr)
+    repaint()
     while True:
-        arr = []
-        create(arr)
-        for j in range(0, 35):
-            print ',', json.dumps(arr)
+        repaint()
         time.sleep(1)
