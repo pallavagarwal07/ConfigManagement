@@ -5,12 +5,25 @@ alias vim=nvim
 alias svim="sudo -E nvim"
 source ~/.zprezto/init.zsh
 unalias gg
+unalias gwc
+alias flix="java -jar /home/pallav/courses/compiler/flix/flix.jar"
 prompt cloud →
+export STARDICT_DATA_DIR="$HOME/.config/dict"
+alias gore="gore --autoimport"
+alias vm="TERM=xterm-256color ssh pallav@192.168.56.101"
 
 
 
 
 
 
-PATH="$PATH:$HOME/.GO/bin"
+export LOGICBLOX_HOME="/home/pallav/Downloads/logicblox"
+export GOPATH="$HOME/.GO"
+export PATH="$HOME/.GO/bin:$PATH:$LOGICBLOX_HOME/bin"
+export PATH="$HOME/.node/bin:$PATH"  
+export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"  
+
 # place ''~/.zshrc''
+
+# added by travis gem
+[ -f /home/pallav/.travis/travis.sh ] && source /home/pallav/.travis/travis.sh
