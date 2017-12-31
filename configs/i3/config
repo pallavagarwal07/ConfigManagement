@@ -32,7 +32,7 @@ floating_modifier $mod
 set $oth Mod1
 
 # start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec kitty
 bindsym $oth+Return exec emacsclient -c -a ""
 
 # kill focused window
@@ -173,16 +173,31 @@ bar {
         font pango:Source Code Pro for Powerline 9
 }
 
-smart_borders on
+#smart_borders on
 gaps inner 13
 gaps outer 0
 
 bindsym $mod+Ctrl+f exec bash -c 'firefox-bin || firefox'
 bindsym $mod+Ctrl+n exec bash -c 'firefox-bin --private-window || firefox --private-window'
-bindsym $mod+Ctrl+Return exec --no-startup-id urxvt -name 'scratchpad_urxvt' -depth 32 -bg 'rgba:0000/0000/0000/a666'
-exec --no-startup-id urxvt -name 'scratchpad_urxvt' -depth 32 -bg 'rgba:0000/0000/0000/a666'
-exec --no-startup-id compton -b
+bindsym $mod+Ctrl+Return exec --no-startup-id urxvt -name 'scratchpad_urxvt' -depth 32 -bg 'rgba:0000/0000/0000/a666' -e zsh -c ' \
+fn(){              \
+zsh -i && fn || fn \
+} && fn            \
+'
+exec --no-startup-id urxvt -name 'scratchpad_urxvt' -depth 32 -bg 'rgba:0000/0000/0000/a666' -e zsh -c ' \
+fn(){              \
+zsh -i && fn || fn \
+} && fn            \
+'
+bindsym Print exec bash -c "cd /home/pallav/shots && scrot"
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+bindsym $mod+Ctrl+l exec --no-startup-id urxvt -name 'scratchpad_float' -depth 32 -bg 'rgba:0000/0000/0000/e666' -e zsh -c "source ~/.zshrc && sdcv -l && sdcv \$(xsel -p) && read"
 for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel
+for_window [instance="scratchpad_float"] floating enable
 for_window [class="^.*"] border pixel 0
 bindsym F12 [instance="scratchpad_urxvt"] scratchpad show
+exec --no-startup-id compton -b
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
 workspace_auto_back_and_forth yes

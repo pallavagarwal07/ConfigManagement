@@ -11,5 +11,6 @@ in
       pkgs.python2Packages.beautifulsoup4
       pkgs.python2Packages.markdown
       pkgs.python2Packages.pygments
+      pkgs.python2Packages.pycrypto
     ];
   }

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -ex
+cmd="${1}"; shift
+if command -v "${cmd}"; then
+    "${cmd}" ${@}
+else
+    nix-shell -p "${cmd}" --run "${cmd} $(echo ${@})"
+fi

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo "Going to run" >> ~/log
+echo "Args are: " "$@" >> ~/log
+echo "Time is" $(date +%s) >> ~/log
+sdm "$@" >> ~/log 2>&1
+echo "" >> ~/log
+echo "Time is" $(date +%s) >> ~/log

@@ -12,3 +12,6 @@ alias svim="sudo -E nvim"
 
 PATH="$PATH:$HOME/.GO/bin"
 # place ''~/.bashrc''
+
+# added by travis gem
+[ -f /home/pallav/.travis/travis.sh ] && source /home/pallav/.travis/travis.sh

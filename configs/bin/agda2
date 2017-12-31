@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+agda -i /home/pallav/courses/popl/agda/1.3 $@

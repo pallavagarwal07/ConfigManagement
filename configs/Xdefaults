@@ -24,7 +24,8 @@ URxvt*saveLines:32767
 URxvt*troughColor:#000000
 URxvt*scrollColor:#222222
 URxvt*font: xft:Source Code Pro for Powerline:size=13, xft:Source Code Pro:size=13, xft:DejaVu Sans Mono:size=13, xft:Unifont:size=13
-!URxvt*font: xft:Unifont:size=13
+!URxvt*font: xft:Unifont:size=14
+!URxvt*font: xft:Source Code Pro for Powerline:size=13
 
 
 ! with this set to true, when an app sends a bell to the terminal, awesome hilights the appropriate tag(s) ;)

@@ -13,9 +13,10 @@ arr = []
 text = ''
 
 def LOG(content):
-    with open("/home/pallav/log2", "a") as f:
-        f.write(content)
-        f.write("\n")
+    pass
+    #with open("/home/pallav/log2", "a") as f:
+    #    f.write(content)
+    #    f.write("\n")
 
 def battery():
     dict = {}
@@ -57,8 +58,8 @@ def click_events():
             LOG(text)
             try:
                 obj = json.loads(text)
-                if "x_off" in obj:
-                    obj["x"] = 1500 + obj["x_off"] - 47
+                if "relative_x" in obj:
+                    obj["x"] = 1500 + obj["relative_x"] - 47
                 if obj["button"] == 1 and obj["x"] >= 1500 and obj["x"] <= 1605:
                     new_vol = 10*((obj["x"] - 1500)/7 + 1)
                     sp.call(["pamixer", "--allow-boost", "--set-volume", str(new_vol)])
