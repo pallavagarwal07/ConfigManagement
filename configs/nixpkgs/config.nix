@@ -43,19 +43,21 @@
     };
 
     my_conf_packages = with pkgs; [
-      # Used by URXVT
+      # Used by terminal emulator.
       source-code-pro source-sans-pro unifont
-      # appearance
+
+      # Appearance
       ubuntu_font_family lxappearance compton
-      # tools
+
+      # Tools
       scrot libnotify i3lock alsaTools
       pythonPackages.udiskie kitty xsel sdcv
       xdg_utils xorg.xkill usbutils
-      ccrypt
+      ccrypt keybase
     ];
 
     my_tmp_packages = with pkgs; [
-      calibre kvm
+      calibre kvm openvpn
     ];
 
     my_custom_packages = [ sdm pkgs.i3-gaps ];

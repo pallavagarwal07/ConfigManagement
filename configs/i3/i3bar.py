@@ -14,9 +14,9 @@ text = ''
 
 def LOG(content):
     pass
-    #with open("/home/pallav/log2", "a") as f:
-    #    f.write(content)
-    #    f.write("\n")
+    # with open("/home/pallav/log2", "a") as f:
+       # f.write(content)
+       # f.write("\n")
 
 def battery():
     dict = {}
@@ -58,14 +58,16 @@ def click_events():
             LOG(text)
             try:
                 obj = json.loads(text)
-                if "relative_x" in obj:
-                    obj["x"] = 1500 + obj["relative_x"] - 47
-                if obj["button"] == 1 and obj["x"] >= 1500 and obj["x"] <= 1605:
-                    new_vol = 10*((obj["x"] - 1500)/7 + 1)
-                    sp.call(["pamixer", "--allow-boost", "--set-volume", str(new_vol)])
-                    repaint()
-                if obj["button"] == 2 or obj["button"] == 3:
-                    sp.call(["bash", "-c", "pavucontrol&"])
+                LOG(str(obj))
+                if obj["name"] == "vol":
+                    if "relative_x" in obj:
+                        obj["x"] = 1500 + obj["relative_x"] - 47
+                    if obj["button"] == 1 and obj["x"] >= 1500 and obj["x"] <= 1605:
+                        new_vol = 10*((obj["x"] - 1500)/7 + 1)
+                        sp.call(["pamixer", "--allow-boost", "--set-volume", str(new_vol)])
+                        repaint()
+                    if obj["button"] == 2 or obj["button"] == 3:
+                        sp.call(["bash", "-c", "pavucontrol&"])
             except Exception as e:
                 text = str(e)
             buff = ''
@@ -88,7 +90,7 @@ def sound():
     return dict
 
 def bright():
-    proc = float(sp.check_output(["sudo", "light"]).replace("\n", ''))
+    proc = float(sp.check_output(["light"]).replace("\n", ''))
     text = u"\u2600 "+str(int(proc))+"%"
     dict = {'full_text': u'{:^7}'.format(text)}
     dict["name"] = "bright"
@@ -96,15 +98,17 @@ def bright():
     return dict
 
 def connection(fullName, abbrv):
-    ifc = sp.Popen(["ifconfig", fullName], stdout=sp.PIPE)
+    ifc = sp.Popen(["ifconfig"], stdout=sp.PIPE)
+    grp = sp.Popen(["grep", "-A", "1", fullName],
+        stdin=ifc.stdout, stdout=sp.PIPE)
     ans = sp.Popen(["sed", "-En",
         r"s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p"],
-        stdin=ifc.stdout, stdout=sp.PIPE)
+        stdin=grp.stdout, stdout=sp.PIPE)
     ip = str(ans.stdout.read()).replace("\n", '')
     dict = {'name': 'wlan'}
     dict["instance"] = "0"
     if '.' in ip:
-        dict["full_text"] = '{:^20}'.format( abbrv + ": "+ip )
+        dict["full_text"] = '{:^20}'.format(abbrv + ": "+ip)
         dict['color'] = '#44ff11'
     else:
         dict["full_text"] = '{:^20}'.format(abbrv + ": --.--.--.--" )
@@ -121,8 +125,8 @@ def repaint():
 def create(arr):
     # global text
     # arr.append({'full_text': str(text)})
-    arr.append(connection('enp9s0', 'E'))
-    arr.append(connection('wlp8s0', 'W'))
+    arr.append(connection('enp', 'E'))
+    arr.append(connection('wlp', 'W'))
     arr.append(bright())
     arr.append(sound())
     arr.append(battery())

@@ -214,11 +214,11 @@ augroup CPT
   au BufReadPre *.cpt set bin
   au BufReadPre *.cpt set viminfo=
   au BufReadPre *.cpt set noswapfile
-  au BufReadPost *.cpt let $vimpass = inputsecret("Password: ")
-  au BufReadPost *.cpt silent '[,']!ccrypt -cb -E vimpass
+  au BufReadPost *.cpt let $MASTER_KEY_VARSTACK = inputsecret("Password: ")
+  au BufReadPost *.cpt silent '[,']!go run ~/proj/varstack/_plugins/decrypt.go
   au BufReadPost *.cpt set nobin
   au BufWritePre *.cpt set bin
-  au BufWritePre *.cpt '[,']!ccrypt -e -E vimpass
+  au BufWritePre *.cpt '[,']!go run ~/proj/varstack/_plugins/encrypt.go
   au BufWritePost *.cpt u
   au BufWritePost *.cpt set nobin
 augroup END
