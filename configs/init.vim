@@ -12,7 +12,7 @@ let g:python_host_prog=join(split(system('which nvim-python 2>/dev/null >&2 && w
 call plug#begin(vimDir . '/plugged')
 Plug 'scrooloose/nerdcommenter'                                      " Comment fast and professionally
 Plug 'scrooloose/nerdtree' , {'on': 'NERDTreeToggle'}                " Proper file explorer inside vim
-Plug 'flazz/vim-colorschemes'                                        " All popular Colorscheme
+Plug 'flazz/vim-colorschemes'                                        " All the popular Colorschemes
 Plug 'tpope/vim-surround'                                            " Quick Surround with tags or Brackets
 Plug 'octol/vim-cpp-enhanced-highlight'                              " Enhanced syntax highlight for CPP files
 Plug 'Lokaltog/vim-easymotion'                                       " Quick jumping between lines
