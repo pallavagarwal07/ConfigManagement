@@ -17,13 +17,16 @@ alias vm="TERM=xterm-256color ssh pallav@192.168.56.101"
 
 
 
-export LOGICBLOX_HOME="/home/pallav/Downloads/logicblox"
 export GOPATH="$HOME/.GO"
-export PATH="$HOME/.GO/bin:$PATH:$LOGICBLOX_HOME/bin"
-export PATH="$HOME/.node/bin:$PATH"  
+export PATH="$HOME/.GO/bin:$PATH:$LOGICBLOX_HOME/bin:$HOME/bin:$HOME/tools/arcanist/bin"
+export PATH="$HOME/.node/bin:$PATH:$HOME/node_modules/.bin"
+export EDITOR=vim
 export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"  
 
 # place ''~/.zshrc''
 
+bindkey "^[OA" history-substring-search-up
+bindkey "^[OB" history-substring-search-down
+setopt PROMPT_SP
 # added by travis gem
 [ -f /home/pallav/.travis/travis.sh ] && source /home/pallav/.travis/travis.sh

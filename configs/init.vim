@@ -1,13 +1,8 @@
-let vimDir = '$HOME/.vim'
-if has('nvim')
-  let vimDir = '$HOME/.config/nvim'
-endif
+let vimDir = '$HOME/.config/nvim'
 
 if empty(glob(vimDir . '/autoload/plug.vim'))
     execute "!curl -fLo " . vimDir . "/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 endif
-
-let g:python_host_prog=join(split(system('which nvim-python 2>/dev/null >&2 && which nvim-python || which python')), " ")
 
 call plug#begin(vimDir . '/plugged')
 Plug 'scrooloose/nerdcommenter'                                      " Comment fast and professionally
@@ -19,9 +14,7 @@ Plug 'Lokaltog/vim-easymotion'                                       " Quick jum
 Plug 'myusuf3/numbers.vim'                                           " Auto Toggle between relative and normal numbering
 Plug 'sjl/gundo.vim'                                                 " Graphical undo tree
 Plug 'marcweber/vim-addon-mw-utils'                                  " Vim Addons
-Plug 'garbas/vim-snipmate'                                           " Snippets for reusable code
 Plug 'tpope/vim-fugitive'                                            " Git Wrapper
-Plug 'tomtom/tlib_vim'                                               " Needed for SnipMate :(
 Plug 'vim-scripts/auto-pairs-gentle'                                 " Auto insert matching brackets
 Plug 'vim-scripts/autoswap.vim'                                      " Make vim stop with swap messages intelligently
 Plug 'godlygeek/tabular'                                             " Beautiful Alignment when needed
@@ -33,7 +26,6 @@ Plug 'bling/vim-airline'                                             " Who doesn
 Plug 'kien/ctrlp.vim'                                                " Fast fuzzy file searching
 Plug 'terryma/vim-multiple-cursors'                                  " Multiple Cursors like Sublime Text
 Plug 'kchmck/vim-coffee-script'                                      " Highlighting and syntax for coffeescript
-Plug 'fatih/vim-go'                                                  " Go completion and features
 Plug 'KabbAmine/zeavim.vim'                                          " Direct documentation access
 Plug 'Superbil/llvm.vim', { 'for': 'llvm' }                          " LLVM highlighting
 Plug 'LnL7/vim-nix', { 'for': 'nix' }
@@ -47,14 +39,31 @@ Plug 'dietsche/vim-lastplace'
 Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-sleuth'
 Plug 'rust-lang/rust.vim'
-Plug 'floobits/floobits-neovim'
 Plug 'osyo-manga/vim-over'
 Plug 'derekelkins/agda-vim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'rhysd/vim-goyacc'
-call plug#end()                                                      " Vundle ends here
 
-set shiftwidth=4                                                     " Indentation
+Plug 'fatih/vim-go'                                                  " Go completion and features
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+Plug 'google/vim-glaive'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+call plug#end()                                                      " Vundle ends here
+call glaive#Install()
+
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+augroup END
+
+set shiftwidth=2                                                     " Indentation
 syntax on
 filetype plugin indent on
 
@@ -100,17 +109,22 @@ cnoremap %s/ OverCommandLine<cr>%sr<BS>/
                         " --------------------------------CONFIGS----------------------------- "
 
 let NERDTreeIgnore=['\.pyc$', '__pycache__']                         " Ignoring .pyc files and __pycache__ folder
+
 let g:go_fmt_command = "goimports"                                   " Rewrite go file with correct imports
 let g:over_enable_cmd_window = 1
+let g:go_def_mapping_enabled = 0
+set signcolumn=no
+
 set wildignore+=*/bin/*,main,*/__pycache__/*,*.pyc,*.swp
 set backspace=indent,eol,start                                       " Make backspace work with end of line and indents
+set completeopt-=preview
 set foldmethod=syntax                                                " Auto Add folds - Trigger with za
 set foldlevel=9999                                                   " Keep folds open by default
 set scrolloff=10                                                     " Scroll Offset below and above the cursor
 set sidescroll=1                                                     " How many columns to scroll at once on moving right
 set sidescrolloff=20                                                 " Scroll offset on scrolling horizontally
 set expandtab                                                        " Replace tab with spaces
-set tabstop=4                                                        " Tab = 4 Space
+set tabstop=2                                                        " Tab = 4 Space
 "set softtabstop=4                                                   " Act like there are tabs not spaces
 set hidden                                                           " Hide abandoned buffers without message
 set wildmenu                                                         " Tab command completion in vim
