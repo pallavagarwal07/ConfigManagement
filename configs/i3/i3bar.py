@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
 import time
@@ -20,8 +20,8 @@ def LOG(content):
 
 def battery():
     dict = {}
-    status = open('/sys/class/power_supply/BAT1/status').read()
-    percent = open('/sys/class/power_supply/BAT1/capacity').read()
+    status = open('/sys/class/power_supply/BAT0/status').read()
+    percent = open('/sys/class/power_supply/BAT0/capacity').read()
 
     if 'Charging' in status or 'Full' in status:
         charge = True
