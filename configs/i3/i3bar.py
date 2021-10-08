@@ -6,7 +6,7 @@ import os
 import json
 import time
 import string
-import thread
+import threading
 import subprocess as sp
 
 arr = []
@@ -53,9 +53,8 @@ def click_events():
     try:
         buff = ''
         while True:
-            buff += raw_input()
+            buff += input()
             text = buff[0].replace(',', '') + buff[1:]
-            LOG(text)
             try:
                 obj = json.loads(text)
                 LOG(str(obj))
@@ -64,7 +63,8 @@ def click_events():
                         obj["x"] = 1500 + obj["relative_x"] - 47
                     if obj["button"] == 1 and obj["x"] >= 1500 and obj["x"] <= 1605:
                         new_vol = 10*((obj["x"] - 1500)/7 + 1)
-                        sp.call(["pamixer", "--allow-boost", "--set-volume", str(new_vol)])
+                        arr = ["pamixer", "--allow-boost", "--set-volume", str(int(new_vol))]
+                        sp.call(arr)
                         repaint()
                     if obj["button"] == 2 or obj["button"] == 3:
                         sp.call(["bash", "-c", "pavucontrol&"])
@@ -77,12 +77,12 @@ def click_events():
 
 def sound():
     try:
-        proc = sp.check_output(["pamixer", "--get-volume"]).replace("\n", "")
+        proc = sp.check_output(["pamixer", "--get-volume"]).replace(b"\n", b"")
     except Exception as e:
-        proc = "0"
-    text = u"\u266b " + proc
+        proc = b"0"
+    text = u"\u266b " + proc.decode()
     bar = []
-    percent = int(proc)/10
+    percent = int(proc)//10
     bar = [u'\u2588']*percent + [u'\u2592']*(15-percent)
     dict = {'full_text': u'{:>21}'.format(text + " " + ''.join(bar))}
     dict["name"] = "vol"
@@ -90,7 +90,7 @@ def sound():
     return dict
 
 def bright():
-    proc = float(sp.check_output(["light"]).replace("\n", ''))
+    proc = float(sp.check_output(["light"]).replace(b"\n", b''))
     text = u"\u2600 "+str(int(proc))+"%"
     dict = {'full_text': u'{:^7}'.format(text)}
     dict["name"] = "bright"
@@ -104,7 +104,7 @@ def connection(fullName, abbrv):
     ans = sp.Popen(["sed", "-En",
         r"s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p"],
         stdin=grp.stdout, stdout=sp.PIPE)
-    ip = str(ans.stdout.read()).replace("\n", '')
+    ip = ans.stdout.read().replace(b"\n", b"").decode()
     dict = {'name': 'wlan'}
     dict["instance"] = "0"
     if '.' in ip:
@@ -118,7 +118,7 @@ def connection(fullName, abbrv):
 def repaint():
     arr = []
     create(arr)
-    print ',', json.dumps(arr)
+    print (',', json.dumps(arr))
     sys.stdout.flush()
 
 
@@ -134,10 +134,11 @@ def create(arr):
 
 
 if __name__ == '__main__':
-    thread.start_new_thread(click_events, ())
-    print '{ "version": 1, "click_events": true }'
-    print '['
-    print '[]'
+    th = threading.Thread(target=click_events, args=())
+    th.start()
+    print ('{ "version": 1, "click_events": true }')
+    print ('[')
+    print ('[]')
     repaint()
     while True:
         repaint()
