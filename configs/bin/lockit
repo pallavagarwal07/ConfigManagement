@@ -5,7 +5,7 @@ tmpbg='/tmp/screen.png'
 
 (( $# )) && { icon=$1; }
 
-scrot "$tmpbg"
+scrot -o "$tmpbg"
 #convert "$tmpbg" -resize 12.5% -resize 800% "$tmpbg"
 convert "$tmpbg" -blur 0x4 "$tmpbg"
 #convert "$tmpbg" -resize 12.5x12.5% -gaussian-blur 0x50 -resize 800x800% "$tmpbg"

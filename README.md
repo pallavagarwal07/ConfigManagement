@@ -94,3 +94,15 @@ replaced by a symlink to prevent data loss.
 
 - Ability to assert commands to run after placing a file. Eg to run `fc-cache` after placing fonts folder.
 - Ability to put condidtional statements. For example, place `.vimrc` only if `which vim` returns a zero exit code.
+
+
+### Recommended packages (no specific order)
+    alsa-plugins pulseaudio-alsa alsa-utils aplay dmenu
+    efibootmgr feh fprintd fwupd git google-chrome i3-gaps
+    ifconfig imagemagick iproute2 lxdm git base-devel
+    libfido2 libinput lightdm lightdm-slick-greeter lightdm-webkit2-greeter
+    neovim net-tools networkmanager network-manager-applet nodejs
+    pamixer pavucontrol pulseaudio python2 rofi
+    rxvt-unicode i3lock i3status ttf-dejavu sudo udisks2 vi xclip xsel
+    xf86-input-libinput xf86-input-synaptics xorg xorg-xinit xterm zsh
+    google-chrome-stable fingerprint-gui light-git usbutils

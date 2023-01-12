@@ -99,6 +99,8 @@ def start_symming(path):
                     os.makedirs(backup)
                 shutil.move(sym, backup)
         print "Trying to symlink", path, "to", sym
+        try: os.makedirs(os.path.dirname(sym))
+        except OSError as e: pass
         os.symlink(path, sym)
         sym_created.append(sym)
         print "Symlink to " + path + " created."
@@ -123,6 +125,8 @@ def start_symming(path):
                                 os.makedirs(backup)
                             shutil.move(sym, backup)
                     print "Trying to symlink", name, "to", sym
+                    try: os.makedirs(os.path.dirname(sym))
+                    except OSError as e: pass
                     os.symlink(name, sym)
                     sym_created.append(sym)
                     print "Symlink to " + name + " created."

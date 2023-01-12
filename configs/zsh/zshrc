@@ -4,29 +4,105 @@ alias vi=nvim
 alias vim=nvim
 alias svim="sudo -E nvim"
 source ~/.zprezto/init.zsh
-unalias gg
-unalias gwc
 alias flix="java -jar /home/pallav/courses/compiler/flix/flix.jar"
 prompt cloud →
 export STARDICT_DATA_DIR="$HOME/.config/dict"
 alias gore="gore --autoimport"
 alias vm="TERM=xterm-256color ssh pallav@192.168.56.101"
+alias pac="sudo pacman -S"
 
+function command_not_found_handler() {
+  echo "Command not found: $1"
+  echo "Looking up possible packages:"
+  pacman -F "$1"
+}
 
+function findfile() {
+  if [ -f "WORKSPACE" ]; then
+    printf '%s\n' "${PWD%/}"
+  elif [ "$PWD" = / ]; then
+    false
+  else
+    ( cd .. && findfile )
+  fi
+}
 
+function ev() {
+  if [ "$1" != "" ]; then
+    cd "${HOME}/code/${1}"
+    alias mbazel="${PWD}/devtools/bin/mbazel"
+  elif findfile; then
+    cd "$(findfile)"
+    alias mbazel="${PWD}/devtools/bin/mbazel"
+  else
+    cd "${HOME}/code"
+  fi
+}
 
+function del() {
+  ev && pull
+  curBranch="$(git rev-parse --abbrev-ref HEAD)"
+  c1="$(git rev-list ${curBranch}..origin/master --count)"
+  c2="$(git rev-list origin/master..${curBranch} --count)"
+  if [ "$c1" = 0 -a "$c2" = 0 ]; then
+    bazel clean --expunge
+    git checkout origin/master
+    git branch -d "$curBranch"
+    git worktree remove ../"$curBranch"
+    cd ../ && rm -rf "$curBranch"
+  else
+    echo "Branch not clean or not caught up to master"
+  fi
+}
 
+function new() {
+  curBranch="${1}"; shift
+  cd "${HOME}/code/main"
+  git fetch --all --tags -f
+  git worktree add "../${curBranch}" origin/master
+  ev "${curBranch}"
+  git checkout -b "${curBranch}"
+  mkdir -p /home/pallav/code/main/.git/worktrees/${curBranch}/hooks/
+  scp -O -P2222 pallav@code.evenhc.in:hooks/commit-msg /home/pallav/code/main/.git/worktrees/${curBranch}/hooks/commit-msg
+}
 
+function pull() {
+  git fetch --all --tags -f && git rebase origin/master
+}
+
+alias gra='pushd $(git rev-parse --show-toplevel) && git add . && git commit --amend --no-edit && git review'
+export DB_SOCKET_DIR="/var/user/database"
 export GOPATH="$HOME/.GO"
-export PATH="$HOME/.GO/bin:$PATH:$LOGICBLOX_HOME/bin:$HOME/bin:$HOME/tools/arcanist/bin"
-export PATH="$HOME/.node/bin:$PATH:$HOME/node_modules/.bin"
-export EDITOR=vim
-export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"  
-
-# place ''~/.zshrc''
+export GOPHERJS_GOROOT="$(go1.17 env GOROOT)"
+export PATH="$HOME/.pyenv/shims:$HOME/.GO/bin:$PATH:$LOGICBLOX_HOME/bin:$HOME/bin:$HOME/tools/arcanist/bin"
+export PATH="$HOME/.node/bin:$PATH:$HOME/.npm/bin:$HOME/backup/save/proj/flutter/bin"
+export EDITOR=nvim
+export VISUAL=nvim
+export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
+export ANDROID_HOME="/home/pallav/Android/Sdk"
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+PATH+=:/home/pallav/proj/workspace/builds/emsdk
+PATH+=:/home/pallav/proj/workspace/builds/emsdk/upstream/emscripten
+PATH+=:/home/pallav/proj/workspace/builds/emsdk/upstream/bin
+PATH+=:/home/pallav/proj/workspace/builds/emsdk/node/14.15.5_64bit/bin
+export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 bindkey "^[OA" history-substring-search-up
 bindkey "^[OB" history-substring-search-down
 setopt PROMPT_SP
+setopt share_history
 # added by travis gem
 [ -f /home/pallav/.travis/travis.sh ] && source /home/pallav/.travis/travis.sh
+
+# place ''~/.zshrc''
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/home/pallav/.bun/_bun" ] && source "/home/pallav/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

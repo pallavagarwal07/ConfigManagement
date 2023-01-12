@@ -23,8 +23,12 @@ URxvt*scrollTtyKeypress: true
 URxvt*saveLines:32767
 URxvt*troughColor:#000000
 URxvt*scrollColor:#222222
-URxvt*font: xft:Source Code Pro for Powerline:size=13, xft:Source Code Pro:size=13, xft:DejaVu Sans Mono:size=13, xft:Unifont:size=13
-!URxvt*font: xft:Unifont:size=14
+URxvt*font: xft:Source Code Pro for Powerline:size=13, \
+            xft:Source Code Pro:size=13,  \
+            xft:DejaVu Sans Mono:size=13, \
+            xft:DejaVu Sans:size=13, \
+            xft:Unifont:size=13
+!URxvt*font: xft:DejaVu Sans:size=13
 !URxvt*font: xft:Source Code Pro for Powerline:size=13
 
 
@@ -34,7 +38,7 @@ URxvt*urgentOnBell: true
 ! these three lines enable clicking on links to open them ;)
 !! if you want to enable tab support, append ,tabbed to the next line
 !! then use shift+down arrow to create tabs and shift+{left,right} arrows to switch between them
-URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine
+URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine,-confirm-paste
 URxvt*matcher.button: 1
 !! do not forget to change this to your favorite browser
 URxvt*urlLauncher: firefox

@@ -1,7 +1,7 @@
 let vimDir = '$HOME/.config/nvim'
 
 if empty(glob(vimDir . '/autoload/plug.vim'))
-    execute "!curl -fLo " . vimDir . "/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  execute "!curl -fLo " . vimDir . "/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 endif
 
 call plug#begin(vimDir . '/plugged')
@@ -23,7 +23,7 @@ Plug 'jceb/vim-orgmode'                                              " Add OrgMo
 Plug 'vim-scripts/cmdalias.vim'                                      " Set up alias for accidental commands
 Plug 'nvie/vim-flake8'                                               " Point out PEP8 inconsistencies
 Plug 'bling/vim-airline'                                             " Who doesn't know about vim airline plugin
-Plug 'kien/ctrlp.vim'                                                " Fast fuzzy file searching
+"Plug 'kien/ctrlp.vim'                                                " Fast fuzzy file searching
 Plug 'terryma/vim-multiple-cursors'                                  " Multiple Cursors like Sublime Text
 Plug 'kchmck/vim-coffee-script'                                      " Highlighting and syntax for coffeescript
 Plug 'KabbAmine/zeavim.vim'                                          " Direct documentation access
@@ -36,31 +36,61 @@ Plug 'majutsushi/tagbar'
 Plug 'digitaltoad/vim-pug'
 Plug 'leafgarland/typescript-vim'
 Plug 'dietsche/vim-lastplace'
-Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-sleuth'
 Plug 'rust-lang/rust.vim'
 Plug 'osyo-manga/vim-over'
 Plug 'derekelkins/agda-vim'
-Plug 'Chiel92/vim-autoformat'
-Plug 'rhysd/vim-goyacc'
+"Plug 'fatih/vim-go', {'tag': 'v1.25'}                                " Go completion and features
+Plug 'mattn/vim-goimports'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pangloss/vim-javascript'    " JavaScript support
+Plug 'leafgarland/typescript-vim' " TypeScript syntax
+Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
+Plug 'jparise/vim-graphql'        " GraphQL syntax
+Plug 'mattn/emmet-vim'            " HTML abbreviations
+Plug 'bogado/file-line'
+Plug 'sbdchd/neoformat'
 
-Plug 'fatih/vim-go'                                                  " Go completion and features
-Plug 'google/vim-maktaba'
-Plug 'google/vim-codefmt'
-Plug 'google/vim-glaive'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" Based on https://github.com/fatih/vim-go-tutorial
+Plug 'SirVer/ultisnips'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Flutter
+Plug 'dart-lang/dart-vim-plugin'
 call plug#end()                                                      " Vundle ends here
-call glaive#Install()
+
+let g:coc_global_extensions = [ 'coc-json', 'coc-tsserver', 'coc-go', 'coc-flutter', 'coc-css', 'coc-prettier' ]
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gw v<Plug>(coc-codeaction-selected)
+
+let g:coc_filetype_map = {
+  \ 'ino': 'cpp',
+  \ }
 
 augroup autoformat_settings
-  autocmd FileType bzl AutoFormatBuffer buildifier
-  autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
-  autocmd FileType dart AutoFormatBuffer dartfmt
-  autocmd FileType go AutoFormatBuffer gofmt
-  autocmd FileType gn AutoFormatBuffer gn
-  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
-  autocmd FileType java AutoFormatBuffer google-java-format
-  autocmd FileType python AutoFormatBuffer yapf
+  au!
+"  autocmd FileType bzl AutoFormatBuffer buildifier
+"  autocmd FileType markdown,javascript,typescript,javascriptreact,typescriptreact,css,less,sass,scss autocmd BufWritePre <buffer> Neoformat
+  autocmd BufWritePre *.proto,*.md,*.css,*.less,*.sass,*.scss Neoformat
+  autocmd BufWritePre *.jsx,*.tsx,*.ts,*.js Neoformat prettier
+"  autocmd FileType c,cpp,proto,arduino AutoFormatBuffer clang-format
+"  autocmd FileType dart AutoFormatBuffer dartfmt
+"  autocmd FileType go nnoremap gd :GoDef<CR>
+"  autocmd FileType go AutoFormatBuffer gofmt
+"  autocmd FileType gn AutoFormatBuffer gn
+"  autocmd FileType json AutoFormatBuffer js-beautify
+"  autocmd FileType java AutoFormatBuffer google-java-format
+"  autocmd FileType python AutoFormatBuffer yapf
+augroup END
+
+augroup settings
+  au!
+  autocmd FileType go,dart set colorcolumn=81
 augroup END
 
 set shiftwidth=2                                                     " Indentation
@@ -68,51 +98,75 @@ syntax on
 filetype plugin indent on
 
 colorscheme jellybeans                                               " Set active Colorscheme
+highlight ColorColumn ctermbg=234
+
 nnoremap ,; ;
-                                                                     " start commands with ; not :
+" start commands with ; not :
 nnoremap ; :
-                                                                     " Turn word to uppercase in insert mode
+" Turn word to uppercase in insert mode
 inoremap <c-u> <Esc>viwUea
-                                                                     " Toggle NERDTree without python compile files
+" Toggle NERDTree without python compile files
 inoremap <F2> <Esc>:NERDTreeToggle<CR>a
-                                                                     " Toggle NERDTree without python compile files
+" Toggle NERDTree without python compile files
 nnoremap <F2> :NERDTreeToggle<CR>
-                                                                     " Turn on/off wrapping
+" Turn on/off wrapping
 nnoremap <F4> :set wrap!<CR>
-                                                                     " Show open buffers and help in quick switching
+" Show open buffers and help in quick switching
 nnoremap <F5> :buffers<CR>:buffer<Space>
-                                                                     " Turn on/off current line highlight
+" Turn on/off current line highlight
 nnoremap <F9> :set cul!<CR>
-                                                                     " Indent everything in insert mode
+" Indent everything in insert mode
 inoremap <F10> <Esc>mmgg=G`ma
-                                                                     " Indent everything in normal mode
+" Indent everything in normal mode
 nnoremap <F10> <Esc>mmgg=G`m
-                                                                     " comment current line with //
+" comment current line with //
 nmap // <leader>ci
-                                                                     " comment current selection with //
+" comment current selection with //
 vmap // <leader>ci
-                                                                     " w!! force write with sudo even if forgot sudo vim
+" w!! force write with sudo even if forgot sudo vim
 cmap w!! w !sudo tee > /dev/null %<CR>:e!<CR><CR>
-                                                                     " Easy Motion shortcut. Try it!
-nmap ,, <leader><leader>s
+" Easy Motion shortcut. Try it!
+nnoremap <leader>[ :CocAction<CR>
+nnoremap <leader>] :CocDiagnostics<CR>
+nnoremap <leader>p <Plug>(coc-codeaction)
 
 inoremap jk <Esc>
 nnoremap <CR> o<Esc>
 nnoremap  <silent>   <tab>  mq:bnext<CR>`q
 nnoremap  <silent> <s-tab>  mq:bprevious<CR>`q
-                                                                     " Switch buffers with Tab and Shift-Tab
+" Switch buffers with Tab and Shift-Tab
 inoremap <// </<C-X><C-O><C-[>m'==`'
 nnoremap Q !!sh<CR>
-                                                                     " Replace current line with output of shell
+" Replace current line with output of shell
 cnoremap %s/ OverCommandLine<cr>%sr<BS>/
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
 
-                        " --------------------------------CONFIGS----------------------------- "
+command! GFilesRoot execute 'GFiles' s:find_git_root()
+nmap <C-P> :GFilesRoot<CR>
 
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number -- '.shellescape(<q-args>), 0,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+
+set encoding=utf-8
+set hidden
+set nobackup
+set nowritebackup
+set updatetime=300
+inoremap <silent><expr> <c-space> coc#refresh()
+
+
+" --------------------------------CONFIGS----------------------------- "
+"
 let NERDTreeIgnore=['\.pyc$', '__pycache__']                         " Ignoring .pyc files and __pycache__ folder
 
-let g:go_fmt_command = "goimports"                                   " Rewrite go file with correct imports
+let g:goimports_local = 'code.evenhc.in,code.appn.in'
+let g:goimports_show_loclist = 0
 let g:over_enable_cmd_window = 1
-let g:go_def_mapping_enabled = 0
 set signcolumn=no
 
 set wildignore+=*/bin/*,main,*/__pycache__/*,*.pyc,*.swp
@@ -142,34 +196,32 @@ set nohlsearch                                                       " Do not hi
 set modeline                                                         " Turn on modeline
 
 let g:airline_powerline_fonts = 1                                    " Powerline fonts
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
 let g:airline#extensions#tabline#enabled = 1                         " Show buffers above
+
 let g:agda_extraincpaths = ["/home/pallav/courses/popl/agda/1.3"]
 
 if has('persistent_undo')
-    let myUndoDir = expand(vimDir . '/undodir')
-    call system('mkdir -p' . vimDir)
-    call system('mkdir -p' . myUndoDir)
-    let &undodir = myUndoDir
-    set undofile
+  let myUndoDir = expand(vimDir . '/undodir')
+  call system('mkdir -p' . vimDir)
+  call system('mkdir -p' . myUndoDir)
+  let &undodir = myUndoDir
+  set undofile
 endif
 
-
-" Lint Configs
-" let g:clang_format#style_options = {
-"             \ "AccessModifierOffset" : -4,
-"             \ "IndentWidth" : 4,
-"             \ "TabWidth" : 4,
-"             \ "AllowShortIfStatementsOnASingleLine" : "false",
-"             \ "AllowShortBlocksOnASingleLine" : "false",
-"             \ "AllowShortLoopsOnASingleLine" : "false",
-"             \ "AllowShortFunctionsOnASingleLine" : "false",
-"             \ "AlwaysBreakTemplateDeclarations" : "true",
-"             \ "PointerAlignment" : "Right",
-"             \ "DerivePointerAlignment" : "false",
-"             \ "SortIncludes" : "false",
-"             \ "ColumnLimit" : 90,
-"             \ "Standard" : "Auto" }
-
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|generated'
+let g:clang_format#style_options = { "BasedOnStye" : "Google" }
 let g:multi_cursor_insert_maps = {'j':1}
 
 
@@ -184,8 +236,7 @@ vnoremap ,P "+P
 nnoremap ,P "+P
 "----------------------------ABBREVIATIONS-----------------------------"
 iabbrev @@g pallavagarwal07@gmail.com
-iabbrev @@i pallavag@iitk.ac.in
-iabbrev @@c pallavag@cse.iitk.ac.in
+iabbrev @@e pallav@even.in
 
 "---------------------------HABIT--BREAKING----------------------------"
 inoremap <left> <nop>
@@ -197,9 +248,9 @@ nnoremap <up> <nop>
 inoremap <down> <nop>
 nnoremap <down> <nop>
 
-                        "----------------------------GVIM SPECIFIC-----------------------------"
+"----------------------------GVIM SPECIFIC-----------------------------"
 execute "set directory=" . expand(vimDir . "/tmp")
-                                                                     " Swap files in a single place
+" Swap files in a single place
 execute "set backupdir=" . expand(vimDir . "/tmp")
 call system("mkdir -p ". expand(vimDir . "/tmp"))
 set guioptions-=m                                                    " remove menu bar
@@ -208,7 +259,7 @@ set guioptions-=r                                                    " remove ri
 set guioptions-=L                                                    " remove left-hand scroll bar
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
 
-                        "--------------------------------HOOKS---------------------------------"
+"--------------------------------HOOKS---------------------------------"
 augroup filetype_compile
   autocmd!
   autocmd FileType tex nnoremap <F3> mm:w<CR>:!pdflatex<Space>%<CR><CR><Return>`m
@@ -221,7 +272,21 @@ autocmd FileType agda inoremap <localleader>BB 𝔹
 autocmd FileType agda cnoremap <localleader>BB 𝔹
 autocmd FileType agda inoremap <localleader>BV 𝕍
 autocmd FileType agda cnoremap <localleader>BV 𝕍
+inoremap <localleader>RR ₹
 "autocmd BufWrite * :Autoformat
+
+" function! AbsolutePath(fname)
+"   let l:gitdir=substitute(system("git rev-parse --show-toplevel 2>&1 | grep -v fatal:"),'\n','','g')
+"   echom l:gitdir
+"   execute "bd " . a:fname
+"   execute "e " . l:gitdir . a:fname
+" endfunction
+"
+" augroup Workspace
+"   au!
+"   "au BufNewFile //* execute "bd | call AbsolutePath('" . expand('%') ."')"
+"   au BufNewFile //* echom "hi"
+" augroup END
 
 augroup CPT
   au!
@@ -237,7 +302,11 @@ augroup CPT
   au BufWritePost *.cpt set nobin
 augroup END
 
-                        "---------------------------OPERATOR-PENDING---------------------------"
+let g:user_emmet_leader_key='\'
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+
+"---------------------------OPERATOR-PENDING---------------------------"
 " Operate inside next block
 onoremap in( :<c-u>normal! f(vi(<CR>
 onoremap in{ :<c-u>normal! f{vi{<CR>

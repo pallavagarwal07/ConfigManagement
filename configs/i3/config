@@ -32,7 +32,7 @@ floating_modifier $mod
 set $oth Mod1
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec urxvt
 bindsym $oth+Return exec emacsclient -c -a ""
 
 # kill focused window
@@ -161,15 +161,15 @@ hide_edge_borders both
 bindsym $mod+r mode "resize"
 bindsym XF86AudioRaiseVolume exec pamixer --allow-boost -i 20
 bindsym XF86AudioLowerVolume exec pamixer --allow-boost -d 20
-bindsym XF86MonBrightnessUp exec sudo light -A 10
-bindsym XF86MonBrightnessDown exec sudo light -U 10
+bindsym XF86MonBrightnessUp exec light -A 10
+bindsym XF86MonBrightnessDown exec light -U 10
 
-exec --no-startup-id feh --bg-fill ~/.config/wallpapers/ship.jpg
+exec --no-startup-id feh --bg-fill ~/.config/wallpapers/space.jpg
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
         position top
-        status_command python2 ~/.config/i3/i3bar.py
+        status_command python3 ~/.config/i3/i3bar.py
         font pango:Source Code Pro for Powerline 9
 }
 
@@ -189,6 +189,7 @@ fn(){              \
 zsh -i && fn || fn \
 } && fn            \
 '
+bindsym $mod+m move workspace to output left
 bindsym Print exec bash -c "cd /home/pallav/shots && scrot"
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
@@ -197,7 +198,8 @@ for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel
 for_window [instance="scratchpad_float"] floating enable
 for_window [class="^.*"] border pixel 0
 bindsym F12 [instance="scratchpad_urxvt"] scratchpad show
-exec --no-startup-id compton -b
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
+exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' "libinput Tapping Enabled" 1
 workspace_auto_back_and_forth yes
+exec --no-startup-id i3-msg 'workspace bugs; exec ~/bin/even-chrome --app="https://linear.app/even/my-issues/assigned"; move workspace to output left'

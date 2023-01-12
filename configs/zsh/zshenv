@@ -1,3 +1,4 @@
 source ~/.zprezto/runcoms/zshenv
 
 # place &~/.zshenv&
+if [ -e /home/pallav/.nix-profile/etc/profile.d/nix.sh ]; then . /home/pallav/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

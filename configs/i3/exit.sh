@@ -5,5 +5,5 @@ while [ "$select" != "NO" -a "$select" != "SHUTDOWN" -a "$select" != "LOGOUT" -a
 done
 [ "$select" = "NO" ] && exit 0
 [ "$select" = "LOGOUT" ] && i3-msg exit
-[ "$select" = "SHUTDOWN" ] && sudo shutdown -h now
-[ "$select" = "REBOOT" ] && sudo reboot
+[ "$select" = "SHUTDOWN" ] && shutdown -h now
+[ "$select" = "REBOOT" ] && reboot
