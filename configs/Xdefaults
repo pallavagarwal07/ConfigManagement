@@ -42,6 +42,6 @@ URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine,-
 URxvt*matcher.button: 1
 !! do not forget to change this to your favorite browser
 URxvt*urlLauncher: firefox
-
+URxvt.perl-ext-common:-confirm-paste
 
 !! place &~/.Xresources&

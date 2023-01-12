@@ -4,14 +4,18 @@ alias vi=nvim
 alias vim=nvim
 alias svim="sudo -E nvim"
 
-
-
-
-
-
-
 export PATH="$PATH:$HOME/.GO/bin"
+source /usr/share/nvm/init-nvm.sh
 
-# added by travis gem
-[ -f /home/pallav/.travis/travis.sh ] && source /home/pallav/.travis/travis.sh
+if [ -z "${NOZSH}" ] && type zsh &> /dev/null
+then
+    export SHELL=$(which zsh)
+    if [[ -o login ]]
+    then
+        exec zsh -l
+    else
+        exec zsh
+    fi
+fi
+
 # place ''~/.bashrc''

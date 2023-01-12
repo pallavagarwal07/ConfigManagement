@@ -86,23 +86,23 @@ PATH+=:/home/pallav/proj/workspace/builds/emsdk/upstream/emscripten
 PATH+=:/home/pallav/proj/workspace/builds/emsdk/upstream/bin
 PATH+=:/home/pallav/proj/workspace/builds/emsdk/node/14.15.5_64bit/bin
 export PATH="$PATH":"$HOME/.pub-cache/bin"
+export PATH="$HOME/.GO/bin:$PATH:$LOGICBLOX_HOME/bin:$HOME/bin:$HOME/tools/arcanist/bin"
+export PATH="$HOME/.node/bin:$PATH:$HOME/node_modules/.bin"
+export EDITOR=vim
+export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
 
 bindkey "^[OA" history-substring-search-up
 bindkey "^[OB" history-substring-search-down
 setopt PROMPT_SP
 setopt share_history
-# added by travis gem
-[ -f /home/pallav/.travis/travis.sh ] && source /home/pallav/.travis/travis.sh
-
-# place ''~/.zshrc''
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export HISTFILE=~/.zhistory
+export HISTSIZE=999999999
+export SAVEHIST=$HISTSIZE
 
-# bun completions
-[ -s "/home/pallav/.bun/_bun" ] && source "/home/pallav/.bun/_bun"
+source "${HOME}/.zprezto/init.zsh"
+source "/usr/share/nvm/init-nvm.sh"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+# place ''~/.zshrc''
